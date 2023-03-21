@@ -1,0 +1,40 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/sample_data/LoggedIn">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Friend requests</li>
+    </ol>
+  </nav>
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+    <%
+        if(numbReq.length > 0)
+        {
+            <!-- Looping through todo list for specific user. -->
+            numbReq.forEach(function(data){ 
+                %>
+                <tr>
+                    <th scope="row">1</th>
+                    <td><%= data.username %></td>
+                    <td> <a href="/sample_data/accept?userId=<%= data.id %>">Accept</a> </td>
+                  </tr>
+                <%
+            });
+        }   
+        else
+        {
+            %>
+            <div class="alert alert-primary" role="alert">
+                No friend request are sent to you at the moment.
+              </div>
+            <%
+        }
+        %> 
+    </tbody>
+  </table>

@@ -1,0 +1,72 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">User details</div>
+            <div class="col">
+                <a href="/sample_data/logout" class="btn btn-success btn-sm float-end">Logout</a>
+            </div>
+        </div>
+    </div>
+    <%
+    if(sampleData.length > 0)
+    {
+        <!-- Looping through todo list for specific user. -->
+        sampleData.forEach(function(data){ 
+        
+    %> 
+    <div class="card-body">
+        <div class="alert alert-primary" role="alert">
+            <p class="p1">Welcome you are now logged in as: <strong><%= data.username %></strong></p>
+            <a href="/sample_data/request" style="font-weight:bold;" class="btn btn-primary" role="button">Friend requests</a>
+          </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>First seen</th>
+                    <th>View todo/s</th>
+                </tr>    
+                <tr>
+                    <td><%= data.firstname %></td>
+                    <td><%= data.surname %></td>
+                    <td><%= data.last_seen %></td>
+                    <td><a style="text-decoration:none;" href="timeline">Click me</a></td>
+                </tr>
+                <%
+                    });
+                }
+                else
+                {
+                %>
+                <tr>
+                    <td colspan="5">No Data Found</td>
+                </tr>
+                <%
+                }
+                %>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <p>Enter your todo here</p>
+    </div>
+    <div class="todo">
+        <form action="/sample_data/publish" method="POST">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control" name="title" placeholder="e.g cooking dinner" />
+                </div>
+                <div class="form-group">
+                    <label>Content	</label>
+                    <textarea type="text" class="form-control ckeditor" name="text" rows="" id="editor1"></textarea>
+                </div>
+                <input type="submit" value="submit" class="btn btn-primary"></input>
+                <script>
+                    CKEDITOR.replace( 'editor1' );
+                </script>
+        </form>
+    </div>
+</div>

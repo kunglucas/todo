@@ -1,0 +1,62 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/sample_data/LoggedIn">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Timeline</li>
+  </ol>
+</nav>
+<div class="feed">
+  <div class="feed-wrapper">
+    <% if(feedData.length > 0) { %>
+    <!-- Looping through todo list for specific user. -->
+    <% feedData.forEach(function(data) { %>
+    <%  %>
+    <% const isFriends = data.isFriends %>
+    <% const isAuthor = data.userId === user.id; %>
+    <% const canViewDescription = isFriends || isAuthor %>
+    <div class="card">
+      <div class="card-header">
+        <h3><%= data.title %></h3>
+      </div>
+      <div class="card-body">
+        <% if (isFriends === 1 || isAuthor) { %>
+        <p><%= data.description %></p>
+        <% } else if (!isAuthor) { %>
+        <p>The todo is only visible for friends. Would you like to add this person as a friend? <a href="/sample_data/friendId?friendId=<%= data.userId %>">Send request</a></p>
+        <% } else { %>
+        <p>The todo is only visible for friends.</p>
+        <% } %>
+      </div>
+      <div class="card-footer">
+        <% if(userFeed.length > 0) { %>
+          <% if(isAuthor) { %>
+            <p>This post was written by you.</p>
+          <% } else if(isFriends) { %>
+            <p>This post was written by your friend <strong><%= data.username %></strong></p>
+          <% } else { %>
+            <p>This post was written by: <strong><%= data.username %></strong></p>
+          <% } %>
+          <% if (isAuthor) { %>
+            <p>
+              <% if (data.pendingState == 0) { %>
+                <a href="/sample_data/complete?todo=<%= data.todoID %>">Mark as completed</a>
+              <% } else { %>
+                <a href="/sample_data/reopen?todo=<%= data.todoID %>">Reopen</a>
+              <% } %>
+            </p>
+          <% } else if (!isFriends) { %>
+            <p>Would you like to add this person as a friend? <a href="/sample_data/friendId?friendId=<%= data.userId %>">Send request</a></p>
+          <% } %>
+        <% } else { %>
+          <p><%= data.userId %></p>
+        <% } %>
+      </div>
+    </div>
+    <% }); %>
+    <% } else { %>
+    <div class="alert alert-primary" role="alert">
+      There is currently nothing to do.
+    </div>
+    <% } %>
+  </div>
+  
+</div>
