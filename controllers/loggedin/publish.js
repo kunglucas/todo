@@ -67,7 +67,6 @@ exports.CreateTodo = function CreateTodo(request, response)
               }
               catch (error) {
                   // JWT verification failed, redirect to login page.
-                  console.error(error);
                   response.redirect('/sample_data');
                   return;
                 } 

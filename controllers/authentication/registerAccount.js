@@ -42,7 +42,7 @@ exports.registerAcc = function registerAcc(request, response)
 				{
 	
 					bcrypt.hash(password, saltRounds, function(err, hash) {
-						// Store hash in database
+						//Store hash in database
 						const query = `INSERT INTO users (username, firstname, surname, password) VALUES ("${username}", "${first_name}", "${last_name}", "${hash}")`;
 						database.query(query, function(error, data){
 						if (error) 
@@ -51,8 +51,8 @@ exports.registerAcc = function registerAcc(request, response)
 						  }
 						  else
 						  {
-							//Set cookie.
-							response.redirect("/sample_data/LoggedIn?username=`${username}`");
+							//Redirect to root.
+							response.status(202).redirect("/sample_data/");
 						  }
 						});
 	
