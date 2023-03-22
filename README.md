@@ -12,7 +12,7 @@ Installation
 
 git clone https://github.com/kunglucas/todo.git
 
-### Navigate to the project directory using:
+## Navigate to the project directory using
 
 bash
 
