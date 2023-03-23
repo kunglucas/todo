@@ -41,7 +41,7 @@ exports.loginAcc = function loginAcc(request, response)
 			  const token = jwt.sign({ username: username }, secretKey, { expiresIn: 120 });
 			  response.cookie("jwt", token, {
 				httpOnly: true,
-				sameSite: "none",
+				sameSite: "lax",
 				maxAge: 360000
 			  });
 			  response.status(200).redirect("/sample_data/LoggedIn");

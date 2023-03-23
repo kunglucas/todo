@@ -44,7 +44,6 @@ exports.Profile = function Profile(request, response)
 	  }
 	} catch (error) {
 	  // JWT verification failed, redirect to login page.
-	  console.error(error);
 	  response.status(401).redirect('/sample_data');
 	  return;
 	}
