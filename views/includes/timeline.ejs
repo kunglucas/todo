@@ -27,7 +27,8 @@
         <% } %>
       </div>
       <div class="card-footer">
-        <% if(userFeed.length > 0) { %>
+        <% if(userFeed.length > 0) { 
+          %>
           <% if(isAuthor) { %>
             <p>This post was written by you.</p>
           <% } else if(isFriends) { %>
@@ -43,6 +44,7 @@
                 <a href="/sample_data/reopen?todo=<%= data.todoID %>">Reopen</a>
               <% } %>
             </p>
+            <a class="btn btn-outline-danger" href="/sample_data/delete?item=<%= data.todoID %>" role="button">Delete</a>
           <% } else if (!isFriends) { %>
             <p>Would you like to add this person as a friend? <a href="/sample_data/friendId?friendId=<%= data.userId %>">Send request</a></p>
           <% } %>

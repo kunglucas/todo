@@ -35,9 +35,8 @@ exports.friendRequest = function friendRequest(request, response)
         //Get the session cookie data
         const username = decoded.username;
         if (username) {
-            const dbusername = username;
-            const query = "SELECT * FROM users WHERE username='" + dbusername + "'";
-            database.query(query, function(error, data){
+            const query = "SELECT * FROM users WHERE username=?";
+            database.query(query, [username], function(error, data){
                 if (error) {
                     response.status(500).send('Internal Server Error');
                 } else {
@@ -48,10 +47,9 @@ exports.friendRequest = function friendRequest(request, response)
                         const query = "SELECT requestFromId, requestToId, pendingStatus FROM `friendrequest` LEFT JOIN users on users.id=friendrequest.requestFromId AND users.id=friendrequest.requestToId WHERE requestFromId=? AND requestToId=?";
                         database.query(query, [userId, friendId], function(error, data) {
                             if (error) {
-                                console.log("Error: ", error);
+                                response.status(500).send('Internal server error.');
                             } else if (data.length > 0) {
                                 const status = data[0].pendingStatus;
-                                console.log(status);
                                 if(status == 1) {
                                     //Render that you already are friends with the user.
                                     alreadyFriends(request, response);

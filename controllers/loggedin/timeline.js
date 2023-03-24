@@ -24,9 +24,10 @@ exports.timeline = function timeline(request, response) {
   }
 
   const username = sessionData.username;
+  const dbusername = username;
 
   const query = "SELECT id FROM users WHERE username = ?";
-  database.query(query, [username], function (error, result) {
+  database.query(query, [dbusername], function (error, result) {
     if (error) {
       response.status(500).send('Internal Server Error');
     } else {
@@ -34,24 +35,25 @@ exports.timeline = function timeline(request, response) {
 
       // Fetch data from database
       const query = `
-        SELECT DISTINCT todos.*, 
-          (CASE
-            WHEN (friendrequest.pendingStatus = 1 AND (friendrequest.requestToId = ? OR friendrequest.requestFromId = ?))
+      SELECT DISTINCT todos.*, 
+        (CASE
+          WHEN (friendrequest.pendingStatus = 1 AND (friendrequest.requestToId = ? OR friendrequest.requestFromId = ?))
             THEN 1
-            ELSE 0
-          END) AS isFriends,
-          users.username AS username
-        FROM todos
-        LEFT JOIN friendrequest ON (
-          friendrequest.requestToId = todos.userId 
-          OR friendrequest.requestFromId = todos.userId
-        ) 
-        AND friendrequest.pendingStatus = 1 
-        LEFT JOIN users ON users.id = todos.userId 
-        ORDER BY todoID DESC
-        LIMIT 30
-      `;
-      database.query(query, [userId, userId], function (error, data) {
+          WHEN (friendrequest.pendingStatus IS NULL AND todos.userId != ?)
+            THEN 2
+          ELSE 0
+        END) AS isFriends,
+        users.username AS username
+      FROM todos
+      LEFT JOIN friendrequest ON (
+        (friendrequest.requestToId = todos.userId AND friendrequest.requestFromId = ?) 
+        OR (friendrequest.requestToId = ? AND friendrequest.requestFromId = todos.userId)
+      ) 
+      LEFT JOIN users ON users.id = todos.userId 
+      ORDER BY todoID DESC
+      LIMIT 30
+    `;
+    database.query(query, [userId, userId, userId, userId, userId], function (error, data) {
         if (error) {
           throw error;
         } else {
