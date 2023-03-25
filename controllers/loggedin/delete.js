@@ -15,14 +15,16 @@ exports.deletePost = function deletePost(request, response) {
     });
 
     const validation = schema.validate(request.query);
+    
+    if (!token) {
+        // JWT cookie is not set, redirect to login page
+        response.status(401).redirect('/sample_data');
+        return;
+    }
+
     if(!validation.error)
     {
         const item = request.query.item;
-        if (!token) {
-            // JWT cookie is not set, redirect to login page
-            response.status(401).redirect('/sample_data');
-            return;
-        }
         try {
             const decoded = jwt.verify(token, secretKey);
             //Get the session cookie data
