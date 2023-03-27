@@ -8,15 +8,32 @@ const secretKey = process.env.secretKey;
 
 //Set pendingState to 1.
 exports.accept = function accept(request, response) {
+  const schema = joi.object({
+    userId: joi.number().integer().positive().required()
+  });
+  const validation = schema.validate(request.query);
   //Check if JWT cookie is set.
-const token = request.cookies.jwt;
-  //Declare friends id.
-  const acceptId = request.query.userId;
-  if (!token) {
-    // JWT cookie is not set, redirect to login page
+  const token = request.cookies.jwt;
+  if (validation.error) {
+    if(token)
+    {
+      response.status(400).send(validation.error.message);
+    }
+    else
+    {
+    //JWT cookie is not set, redirect to login page.
     response.status(401).redirect('/sample_data');
+    }
     return;
   }
+    //Declare friends id.
+    const acceptId = request.query.userId;
+    if(!token)
+    {
+    //JWT cookie is not set, redirect to login page.
+    response.status(401).redirect('/sample_data');
+    }
+
   try {
 	  const decoded = jwt.verify(token, secretKey);
         //Get the session cookie data
@@ -30,11 +47,6 @@ const token = request.cookies.jwt;
             } 
             else 
             {
-              const schema = joi.object({
-                acceptId: joi.number().integer().positive().required()
-              });
-
-              const validation = schema.validate({acceptId: acceptId});
               if (!validation.error) 
               {
                 const userId = results[0].id;
@@ -55,10 +67,6 @@ const token = request.cookies.jwt;
                     });
                   }
                 });
-              }
-              else 
-              {
-                response.status(406).send(validation.error.message);
               }
             }
           });

@@ -9,7 +9,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const secretKey = process.env.secretKey;
 
-//Send friend request.
+//Send friend request..
 exports.friendRequest = function friendRequest(request, response) 
 {	
     const token = request.cookies.jwt;
@@ -19,9 +19,17 @@ exports.friendRequest = function friendRequest(request, response)
 
     const validation = schema.validate(request.query);
     if (validation.error) {
-        response.status(400).send(validation.error.details[0].message);
+        if(token)
+        {
+          response.status(400).send(validation.error.message);
+        }
+        else
+        {
+        //JWT cookie is not set, redirect to login page.
+        response.status(401).redirect('/sample_data');
+        }
         return;
-    }
+      }
 
     const friendId = request.query.friendId;
 

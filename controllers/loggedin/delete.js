@@ -21,6 +21,7 @@ exports.deletePost = function deletePost(request, response) {
         response.status(401).redirect('/sample_data');
         return;
     }
+    
 
     if(!validation.error)
     {

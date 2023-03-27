@@ -16,7 +16,7 @@ git clone https://github.com/kunglucas/todo.git
 
 bash
 
-cd todo
+cd todo, cd users
 
 Install the required dependencies using:
 
