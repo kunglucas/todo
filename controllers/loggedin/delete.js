@@ -75,6 +75,6 @@ exports.deletePost = function deletePost(request, response) {
 
     else
     {
-        response.status(400).send(validation.error.details[0].message);
+        response.status(400).send(validation.error.message);
     }
 };
