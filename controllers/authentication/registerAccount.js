@@ -14,12 +14,11 @@ const schema = joi.object({
 //Register account process...
 exports.registerAcc = function registerAcc(request, response)
 {
-    const first_name = request.body.first_name;
+	const validation = schema.validate(request.body);
+	const first_name = request.body.first_name;
 	const last_name = request.body.last_name;
 	const username = request.body.username;
 	const password = request.body.password;
-
-	const validation = schema.validate({username: username, password: password, first_name: first_name, last_name: last_name});
 	if (!validation.error) 
 	{
 		const saltRounds = 10;
@@ -65,6 +64,6 @@ exports.registerAcc = function registerAcc(request, response)
 	} 
 	else 
 	{
-		response.status(406).send(validation.error.message);
+		response.status(401).send(validation.error.message);
 	}
 }

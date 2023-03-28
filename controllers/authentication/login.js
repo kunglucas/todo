@@ -13,12 +13,12 @@ exports.loginAcc = function loginAcc(request, response)
 	dotenv.config();
 	const secretKey = process.env.secretKey;
 	const jwt = require('jsonwebtoken');
-	const username = request.body.username;
-	const inputPassword = request.body.password;
 
-	const validation = schema.validate({username: username, password: inputPassword});
+	const validation = schema.validate(request.body);
 	//For security purposes I do not want to display validation error message after this if statement. Instead I render out my own Error message.
 	if (!validation.error) {
+		const username = request.body.username;
+		const inputPassword = request.body.password;
 		const dbPassword = `SELECT password FROM users WHERE username = ?`;
 		database.query(dbPassword, [`${username}`], function(error, results) {
 		  if (error) {
@@ -41,7 +41,7 @@ exports.loginAcc = function loginAcc(request, response)
 			  const token = jwt.sign({ username: username }, secretKey, { expiresIn: 120 });
 			  response.cookie("jwt", token, {
 				httpOnly: true,
-				sameSite: "lax",
+				sameSite: "lax", //Remove sameSite if login is not working.
 				maxAge: 360000
 			  });
 			  response.status(200).redirect("/sample_data/LoggedIn");
