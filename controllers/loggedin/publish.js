@@ -59,12 +59,12 @@ exports.CreateTodo = function CreateTodo(request, response)
                       //Retrieve the user's ID.
                       const userId = data[0].id;
                       const strippedContent = textContent.replace(/(<([^>]+)>)/gi, ""); //strip HTML tags
-                      const query = 'INSERT INTO todos (userId, dbUsername, title, description) VALUES (?, ?, ?, ?)';
-                      const values = [userId, dbusername, title, strippedContent];
+                      const query = 'INSERT INTO todos (userId, dbUsername, title, description, pendingState) VALUES (?, ?, ?, ?, ?)';
+                      const values = [userId, dbusername, title, strippedContent, 0];
                       database.query(query, values, function(error, data){
                       if (error) 
                       {
-                          response.status(500).send('Internal Server Error');
+                        response.status(500).send('Internal Server Error');
                       }
                       else
                       {
